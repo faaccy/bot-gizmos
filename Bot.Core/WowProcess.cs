@@ -48,8 +48,7 @@ namespace Bot.Core
             var list = processList.Where(c => names.Select(s => s.ToLower()).Contains(c.ProcessName.ToLower()) && !c.MainModule.FileName.Contains("_classic_era_")).ToList();
             return list;
         }
-
-        [DllImport("user32.dll")]
+        [DllImport("User32.Dll", EntryPoint = "PostMessageA")]
         public static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, int wParam, int lParam);
 
         [DllImport("user32.dll")]
@@ -72,6 +71,18 @@ namespace Bot.Core
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, string windowTitle);
+
+        private static int MAKEPARAM(int l, int h)
+        {
+            return ((l & 0xffff) | (h << 0x10));
+        }
+
+        public static int MakeLong(int a, int b)
+        {
+
+            return (int)((uint)((ushort)(a)) | ((uint)((ushort)(b) << 16)));
+
+        }
 
         public struct Rect
         {
@@ -238,11 +249,12 @@ namespace Bot.Core
             var wowProcess = WowProcess.Get();
             if (wowProcess != null)
             {
-                SetCursorPos(position.X, position.Y);
-                Thread.Sleep(100);
-                PostMessage(wowProcess.MainWindowHandle, Keys.WM_LBUTTONDOWN, Keys.VK_RMB, 0);
-                Thread.Sleep(30 + random.Next(0, 47));
-                PostMessage(wowProcess.MainWindowHandle, Keys.WM_LBUTTONUP, Keys.VK_RMB, 0);
+                //Thread.Sleep(100);
+                //PostMessage(wowProcess.MainWindowHandle, Keys.WM_MOUSEMOVE, 0, MAKEPARAM(position.X, position.Y));
+                //Thread.Sleep(30 + random.Next(0, 47));
+                PostMessage(new IntPtr(398874), Keys.WM_LBUTTONDOWN, 0, MakeLong(position.X,position.Y));
+                Thread.Sleep(30);
+                PostMessage(new IntPtr(398874), Keys.WM_LBUTTONUP, 0, MakeLong(position.X, position.Y));
             }
         }
 

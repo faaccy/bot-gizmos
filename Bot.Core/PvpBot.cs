@@ -30,7 +30,10 @@ namespace Bot.Core
                     if (ticks % 10 == 0)
                         Scan();
                     if (ticks % 45 == 0)
+                    {
+                        Watch(1000);
                         Reconnect();
+                    }
                     Watch(1000);
                 }
                 catch (Exception e)
@@ -60,9 +63,9 @@ namespace Bot.Core
         private void AvoidAfkAction()
         {
             WowProcess.PressKeys(ConsoleKey.F);
-            Watch(50);
+            Watch(100);
             WowProcess.PressKeys(ConsoleKey.Spacebar);
-            Watch(500);
+            Watch(1000);
         }
         //重新连接
         private void Reconnect()
@@ -70,7 +73,7 @@ namespace Bot.Core
             WowProcess.PressKeys(ConsoleKey.Enter);
             Watch(5);
             WowProcess.PressKeys(ConsoleKey.Enter);
-            Watch(1000);
+            Watch(5000);
             WowProcess.PressKeys(ConsoleKey.Enter);
             WowProcess.PressKeys(ConsoleKey.Enter);
         }
@@ -95,6 +98,12 @@ namespace Bot.Core
         public void Stop()
         {
             isEnabled = false;
+        }
+
+        public void Test()
+        {
+            Watch(2000);
+            WowProcess.LeftClickMousePos(new Point(780,37));
         }
 
         private DateTime StartTime = DateTime.Now;

@@ -44,7 +44,7 @@ namespace Bot.Core
         public static List<Process> GetList(string name = "")
         {
             var names = string.IsNullOrEmpty(name) ? new List<string> { "Wow", "WowClassic", "Wow-64" } : new List<string> { name };
-            var processList = Process.GetProcesses();
+            var processList = Process.GetProcessesByName("WowClassic");
             var list = processList.Where(c => names.Select(s => s.ToLower()).Contains(c.ProcessName.ToLower()) && !c.MainModule.FileName.Contains("_classic_era_")).ToList();
             return list;
         }
@@ -116,7 +116,7 @@ namespace Bot.Core
             }
         }
 
-        private static void KeysDown(ConsoleKey key)
+        public static void KeysDown(ConsoleKey key)
         {
             lastKey = key;
             var wowProcessList = GetList();
@@ -130,7 +130,7 @@ namespace Bot.Core
             }
         }
 
-        private static void KeysUp(ConsoleKey key)
+        public static void KeysUp(ConsoleKey key)
         {
             var wowProcessList = GetList();
             if (wowProcessList != null)
